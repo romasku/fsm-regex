@@ -1,4 +1,4 @@
-package fsmregex
+package ndfsm
 
 const val emptyMoveCharacter = 0.toChar()
 

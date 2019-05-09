@@ -1,4 +1,7 @@
-package fsmregex
+package ndfsm
+
+import pop
+import push
 
 
 class NDFSM (states: List<NDFSMState>, startState: NDFSMState, finalStates: List<NDFSMState>) {

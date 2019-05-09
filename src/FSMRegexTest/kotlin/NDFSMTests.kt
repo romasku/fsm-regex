@@ -1,9 +1,10 @@
-package fsmregex
-
+import ndfsm.NDFSM
+import ndfsm.NDFSMState
+import ndfsm.emptyMoveCharacter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SampleTests {
+class NDFSMTests {
     @Test
     fun statesWorkProperly() {
         val state1 = NDFSMState()
@@ -16,7 +17,7 @@ class SampleTests {
         assertEquals(listOf(state2), state1.transitions['b'])
     }
 
-    fun runTestsForFSM(fsm: NDFSM, checks: List<Pair<String, Boolean>>) {
+    private fun runTestsForFSM(fsm: NDFSM, checks: List<Pair<String, Boolean>>) {
         for ((string, result) in checks) {
             assertEquals(result, fsm.checkString(string), "Checking for \"$string\"")
         }
