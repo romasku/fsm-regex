@@ -1,4 +1,5 @@
-package regexfsm
+package fsmregex
+
 
 class NDFSM (states: List<NDFSMState>, startState: NDFSMState, finalStates: List<NDFSMState>) {
     private val transitions: Array<Map<Char, Array<Int>>>
@@ -6,31 +7,23 @@ class NDFSM (states: List<NDFSMState>, startState: NDFSMState, finalStates: List
     private val finalStatesBitSet: Set<Int>
 
     init {
-        fun getStateIds(statesToMap: List<NDFSMState>): Array<Int> {
-            return states.mapIndexed { index, state -> index to state }
-                .filter { (_, state) -> state in statesToMap }
-                .map { (index, _) -> index }.toTypedArray()
-        }
         transitions  = Array(states.size) { index ->
-            val map: HashMap<Char, Array<Int>> = HashMap()
-            for (character in states[index].transitions.keys) {
-                map[character] = getStateIds(states[index].transitions[character]!!)
+            states[index].transitions.mapValues {(_, statesForCharacter) ->
+                statesForCharacter.map { states.indexOf(it) }.toTypedArray()
             }
-            map
         }
-        startStateId = getStateIds(listOf(startState))[0]
-        finalStatesBitSet = getStateIds(finalStates).toSet()
+        startStateId = states.indexOf(startState)
+        finalStatesBitSet = finalStates.map { states.indexOf(it) }.toSet()
     }
 
     private fun eClosure(states: Set<Int>): Set<Int> {
         val closure = HashSet(states)
         val stack = ArrayList(states)
         while (stack.size != 0) {
-            val stateId = stack[stack.size - 1]
-            stack.removeAt(stack.size - 1)
-            for (nextStateId in transitions[stateId][emptyMoveCharacter]?: arrayOf()) {
+            val stateId = stack.pop()
+            for (nextStateId in transitions[stateId][emptyMoveCharacter] ?: arrayOf()) {
                 if (nextStateId !in closure) {
-                    stack.add(nextStateId)
+                    stack.push(nextStateId)
                     closure.add(nextStateId)
                 }
             }

@@ -1,12 +1,7 @@
 package fsmregex
 
-import regexfsm.NDFSM
-import regexfsm.NDFSMState
-import regexfsm.emptyMoveCharacter
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class SampleTests {
     @Test
