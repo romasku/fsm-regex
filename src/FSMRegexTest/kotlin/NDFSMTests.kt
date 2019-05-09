@@ -1,6 +1,6 @@
+import fsm.EMPTY_MOVE_CHARACTER
 import ndfsm.NDFSM
 import ndfsm.NDFSMState
-import ndfsm.emptyMoveCharacter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -69,9 +69,9 @@ class NDFSMTests {
         val state2 = NDFSMState()
         val state3 = NDFSMState()
         state1.addTransition('a', state1)
-        state1.addTransition(emptyMoveCharacter, state2)
+        state1.addTransition(EMPTY_MOVE_CHARACTER, state2)
         state2.addTransition('b', state2)
-        state2.addTransition(emptyMoveCharacter, state3)
+        state2.addTransition(EMPTY_MOVE_CHARACTER, state3)
         state3.addTransition('c', state3)
         val fsm = NDFSM(listOf(state1, state2, state3), state1, listOf(state3))
         val checks = listOf(

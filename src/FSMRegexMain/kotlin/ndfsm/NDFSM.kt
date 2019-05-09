@@ -1,30 +1,25 @@
 package ndfsm
 
+import fsm.EMPTY_MOVE_CHARACTER
 import pop
 import push
 
 
 class NDFSM (states: List<NDFSMState>, startState: NDFSMState, finalStates: List<NDFSMState>) {
-    private val transitions: Array<Map<Char, Array<Int>>>
-    private val startStateId: Int
-    private val finalStatesBitSet: Set<Int>
-
-    init {
-        transitions  = Array(states.size) { index ->
-            states[index].transitions.mapValues {(_, statesForCharacter) ->
-                statesForCharacter.map { states.indexOf(it) }.toTypedArray()
-            }
+    private val transitions = Array(states.size) { index ->
+        states[index].transitions.mapValues {(_, statesForCharacter) ->
+            statesForCharacter.map { states.indexOf(it) }.toTypedArray()
         }
-        startStateId = states.indexOf(startState)
-        finalStatesBitSet = finalStates.map { states.indexOf(it) }.toSet()
     }
+    private val startStateId = states.indexOf(startState)
+    private val finalStatesSet = finalStates.map { states.indexOf(it) }.toSet()
 
     private fun eClosure(states: Set<Int>): Set<Int> {
         val closure = HashSet(states)
         val stack = ArrayList(states)
         while (stack.size != 0) {
             val stateId = stack.pop()
-            for (nextStateId in transitions[stateId][emptyMoveCharacter] ?: arrayOf()) {
+            for (nextStateId in transitions[stateId][EMPTY_MOVE_CHARACTER] ?: arrayOf()) {
                 if (nextStateId !in closure) {
                     stack.push(nextStateId)
                     closure.add(nextStateId)
@@ -43,6 +38,6 @@ class NDFSM (states: List<NDFSMState>, startState: NDFSMState, finalStates: List
             }
             currentStates = nextStates
         }
-        return currentStates.intersect(finalStatesBitSet).isNotEmpty()
+        return currentStates.intersect(finalStatesSet).isNotEmpty()
     }
 }
