@@ -1,4 +1,4 @@
-// Make stack from ArrayList
+// Make stack from MutableList
 
 fun <T> MutableList<T>.push(element: T) {
     this.add(element)
